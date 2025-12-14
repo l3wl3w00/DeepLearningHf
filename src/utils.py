@@ -1,19 +1,33 @@
-# Utility functions
-# Common helper functions used across the project.
 import logging
 import sys
+from pathlib import Path
 from types import SimpleNamespace
 
 
-def setup_logger(name=__name__):
-    """Return a stdout logger configured with timestamped messages."""
+
+def setup_logger(name=__name__, log_file="log/run.log"):
+    """Return a logger that writes to stdout and to log/run.log."""
     logger = logging.getLogger(name)
-    if not logger.handlers:
-        logger.setLevel(logging.INFO)
-        handler = logging.StreamHandler(sys.stdout)
-        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
+
+    if logger.handlers:
+        return logger  # already configured
+
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    fmt = logging.Formatter("%(asctime)s - %(levelname)s - %(name)s - %(message)s")
+
+    # stdout
+    sh = logging.StreamHandler(sys.stdout)
+    sh.setFormatter(fmt)
+    logger.addHandler(sh)
+
+    # file
+    Path(log_file).parent.mkdir(parents=True, exist_ok=True)
+    fh = logging.FileHandler(log_file, mode="w", encoding="utf-8")
+    fh.setFormatter(fmt)
+    logger.addHandler(fh)
+
     return logger
 
 
