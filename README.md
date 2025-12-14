@@ -1,47 +1,25 @@
 # Deep Learning Class (VITMMA19) Project Work template
+## Data Preparation
 
+The container expects all data under `/data`. On your host machine, you mount your dataset folder to `/data` inside the container.
 
-## Submission Instructions
-### Data Preparation
+Your local dataset folder should look like this:
+```
+your_data_root/
+  <folder_1>/
+    *.jpg|*.png|*.jpeg|*.bmp|*.tif|*.tiff
+    *.json
+  <folder_2>/
+    *.jpg|*.png|*.jpeg|*.bmp|*.tif|*.tiff
+    *.json
+  ...
+  consensus/
+    *.json
+```
 
-**Important:** You must provide a script (or at least a precise description) of how to convert the raw database into a format that can be processed by the scripts.
-* The scripts should ideally download the data from there or process it directly from the current sharepoint location.
-* Or if you do partly manual preparation, then it is recommended to upload the prepared data format to a shared folder and access from there.
+Only images following this naming pattern are used: `source_identifier_sequence.ext`
 
-### Data Preparation
-
-- Discovers images under --input that match the naming convention.
-- Loads all JSON exports under --input (recursively).
-- Extracts one label per task/entry and annotator.
-- Normalizes filenames so JSON `file_upload` keys match disk basenames.
-- Normalizes labels into exactly 3 classes: Pronation / Neutral / Supination.
-- Computes majority label per image across annotators.
-- Exports:
-    - image_manifest.csv
-    - all_annotations.csv
-    - majority_labels.csv
-    - label_summary.json
-
-Before submitting your project, ensure you have completed the following steps.
-**Please note that the submission can only be accepted if these minimum requirements are met.**
-
-- [ ] **Project Information**: Filled out the "Project Information" section (Topic, Name, Extra Credit).
-- [ ] **Solution Description**: Provided a clear description of your solution, model, and methodology.
-- [ ] **Extra Credit**: If aiming for +1 mark, filled out the justification section.
-- [ ] **Data Preparation**: Included a script or precise description for data preparation.
-- [ ] **Dependencies**: Updated `requirements.txt` with all necessary packages and specific versions.
-- [ ] **Configuration**: Used `src/config.py` for hyperparameters and paths, contains at least the number of epochs configuration variable.
-- [ ] **Logging**:
-    - [ ] Log uploaded to `log/run.log`
-    - [ ] Log contains: Hyperparameters, Data preparation and loading confirmation, Model architecture, Training metrics (loss/acc per epoch), Validation metrics, Final evaluation results, Inference results.
-- [ ] **Docker**:
-    - [ ] `Dockerfile` is adapted to your project needs.
-    - [ ] Image builds successfully (`docker build -t dl-project .`).
-    - [ ] Container runs successfully with data mounted (`docker run ...`).
-    - [ ] The container executes the full pipeline (preprocessing, training, evaluation).
-- [ ] **Cleanup**:
-    - [ ] Removed unused files.
-    - [ ] **Deleted this "Submission Instructions" section from the README.**
+This is the exact format in which files can be downloaded from the teams post about the easy way to download datasets
 
 ## Project Details
 
@@ -52,6 +30,15 @@ Before submitting your project, ensure you have completed the following steps.
 - **Aiming for +1 Mark**: No
 
 ### Solution Description
+**Data preprocessing:**
+A preprocessing script scans `/data` recursively, keeps only images matching the required filename
+pattern `(sajat|internet_identifier_XX.ext)`, and writes a complete image manifest to `/app/output/image_manifest.csv.` 
+It then loads every JSON export it finds (including consensus labels), normalizes filenames, normalizes label variants 
+into exactly three classes, and saves:
+
+- `/app/output/all_annotations.csv` (raw extracted labels)
+- `/app/output/majority_labels.csv` (per-image majority vote)
+- `/app/output/label_summary.json` (coverage + class distribution)
 
 **Model architecture:**
 

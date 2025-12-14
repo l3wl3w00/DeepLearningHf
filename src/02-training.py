@@ -120,6 +120,22 @@ class TrainingConfig:
     val_split: float = 0.2
     num_workers: int = 0
 
+def log_model_summary(model: nn.Module, class_to_idx: dict, input_size=(3, 224, 224)):
+    logger.info("Model architecture: %s", model.__class__.__name__)
+
+    # Try to log the classifier head shape
+    try:
+        head = model.classifier[-1]
+        if hasattr(head, "in_features") and hasattr(head, "out_features"):
+            logger.info("Classifier head: Linear(in_features=%d, out_features=%d)", head.in_features, head.out_features)
+    except Exception:
+        logger.info("Classifier head: (could not infer automatically)")
+
+    total = sum(p.numel() for p in model.parameters())
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    logger.info("Parameters: total=%d, trainable=%d", total, trainable)
+    logger.info("Classes (class_to_idx): %s", class_to_idx)
+    logger.info("Expected input tensor shape: %s", str((None, *input_size)))
 
 def train(cfg: TrainingConfig):
     logger.info("Starting training with config: %s", cfg)
@@ -161,6 +177,7 @@ def train(cfg: TrainingConfig):
 
     num_classes = len(class_to_idx)
     model = build_efficientnet_b0(num_classes).to(device)
+    log_model_summary(model, class_to_idx)
 
     train_loader = DataLoader(
         AnkleDataset(train_df, cfg.data_root, class_to_idx),
