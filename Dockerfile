@@ -3,7 +3,7 @@
 # and must be adapted to your project topic (dependencies, system packages,
 # runtime, GPU support, volumes, entrypoint behaviour etc.).
 
-FROM python:3.9-slim
+FROM python:3.10-slim
 
 WORKDIR /app
 

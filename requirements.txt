@@ -2,10 +2,10 @@
 # For example, add dataset-specific libraries, experiment tracking or GPU tooling as needed.
 
 pandas==2.2.2
-pandas==2.2.2
 scikit-learn==1.5.0
 matplotlib==3.9.0
 seaborn==0.13.2
 torch==2.3.0
 torchvision==0.18.0
 jupyterlab==4.2.1
+numpy<2
