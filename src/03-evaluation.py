@@ -33,7 +33,7 @@ class EvalConfig:
     labels_path: Path
     checkpoint_path: Path
     batch_size: int = 64
-    num_workers: int = 2
+    num_workers: int = 0
 
 
 def _compute_baseline_accuracy(df: pd.DataFrame) -> float:
@@ -113,7 +113,7 @@ def parse_args():
         help="Model checkpoint created by the training script",
     )
     parser.add_argument("--batch-size", type=int, default=64)
-    parser.add_argument("--num-workers", type=int, default=2)
+    parser.add_argument("--num-workers", type=int, default=0)
     return parser.parse_args()
 
 

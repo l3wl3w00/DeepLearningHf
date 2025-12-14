@@ -1,0 +1,125 @@
+[run.sh] Starting full pipeline run at 2025-12-14T21:31:00+00:00
+2025-12-14 21:31:02,616 - WARNING - __main__ - Filename does not match convention: /data/C6037J/internet_hss.edu_01.jpg
+2025-12-14 21:31:02,705 - WARNING - __main__ - Filename does not match convention: /data/ECSGGY/193684925-back-view-of-a-woman-s-bare-feet-and-high-heels-on-a-white-studio-background.jpg
+2025-12-14 21:31:02,780 - WARNING - __main__ - Filename does not match convention: /data/FO6K58/ITWQ3V_sajat_reszvevo01_01.jpg
+2025-12-14 21:31:02,782 - WARNING - __main__ - Filename does not match convention: /data/FO6K58/ITWQ3V_sajat_reszvevo01_02.jpg
+2025-12-14 21:31:02,784 - WARNING - __main__ - Filename does not match convention: /data/FO6K58/ITWQ3V_sajat_reszvevo01_03.jpg
+2025-12-14 21:31:02,785 - WARNING - __main__ - Filename does not match convention: /data/FO6K58/ITWQ3V_sajat_reszvevo10_01.jpg
+2025-12-14 21:31:02,786 - WARNING - __main__ - Filename does not match convention: /data/FO6K58/ITWQ3V_sajat_reszvevo10_02.jpg
+2025-12-14 21:31:02,923 - WARNING - __main__ - Filename does not match convention: /data/GK1XQ4/resztvevo_01.jpg
+2025-12-14 21:31:03,026 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/0.png
+2025-12-14 21:31:03,028 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/1.png
+2025-12-14 21:31:03,030 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/10.png
+2025-12-14 21:31:03,032 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/11.png
+2025-12-14 21:31:03,034 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/12.png
+2025-12-14 21:31:03,035 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/13.png
+2025-12-14 21:31:03,036 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/14.png
+2025-12-14 21:31:03,038 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/15.png
+2025-12-14 21:31:03,039 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/16.png
+2025-12-14 21:31:03,042 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/17.png
+2025-12-14 21:31:03,044 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/18.png
+2025-12-14 21:31:03,046 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/19.png
+2025-12-14 21:31:03,049 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/2.png
+2025-12-14 21:31:03,050 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/3.png
+2025-12-14 21:31:03,052 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/4.png
+2025-12-14 21:31:03,053 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/5.png
+2025-12-14 21:31:03,054 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/6.png
+2025-12-14 21:31:03,056 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/7.png
+2025-12-14 21:31:03,057 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/8.png
+2025-12-14 21:31:03,058 - WARNING - __main__ - Filename does not match convention: /data/ODZF0M/9.png
+2025-12-14 21:31:03,140 - INFO - __main__ - Discovered 379 images across 17 folders
+2025-12-14 21:31:03,149 - INFO - __main__ - Saved image manifest to /app/output/image_manifest.csv
+2025-12-14 21:31:03,242 - INFO - __main__ - Loading annotations from /data/B8V41Y/b8v41y.json
+2025-12-14 21:31:03,246 - INFO - __main__ - Loading annotations from /data/C6037J/C6037J.json
+2025-12-14 21:31:03,253 - INFO - __main__ - Loading annotations from /data/D6AE9F/D6AE9F.json
+2025-12-14 21:31:03,258 - INFO - __main__ - Loading annotations from /data/FGWUFP/FGWUFP.json
+2025-12-14 21:31:03,261 - INFO - __main__ - Loading annotations from /data/FO6K58/FO6K58_labels.json
+2025-12-14 21:31:03,264 - INFO - __main__ - Loading annotations from /data/GK1XQ4/project-1-at-2025-10-15-23-46-9d203653.json
+2025-12-14 21:31:03,267 - INFO - __main__ - Loading annotations from /data/H51B9J/H51B9J.json
+2025-12-14 21:31:03,270 - INFO - __main__ - Loading annotations from /data/ITWQ3V/ITWQ3V.json
+2025-12-14 21:31:03,273 - WARNING - __main__ - No label found for 1573c084-sajat_reszvevo01_02.jpg in ITWQ3V.json
+2025-12-14 21:31:03,273 - INFO - __main__ - Loading annotations from /data/NC1O2T/hf_labels_export.json
+2025-12-14 21:31:03,278 - INFO - __main__ - Loading annotations from /data/NX9GA4/NX9GA4_ankles_labeled.json
+2025-12-14 21:31:03,283 - INFO - __main__ - Loading annotations from /data/ODZF0M/project-2-at-2025-10-16-02-08-8ee4fdfa.json
+2025-12-14 21:31:03,288 - INFO - __main__ - Loading annotations from /data/OJHGS8/OJHGS8.json
+2025-12-14 21:31:03,294 - INFO - __main__ - Loading annotations from /data/XV0M8Z/AnkleAlign_Cimkezes_XV0M8Z.json
+2025-12-14 21:31:03,297 - INFO - __main__ - Loading annotations from /data/consensus/C6037J.json
+2025-12-14 21:31:03,303 - INFO - __main__ - Loading annotations from /data/consensus/D0V869.json
+2025-12-14 21:31:03,307 - INFO - __main__ - Loading annotations from /data/consensus/D6AE9F.json
+2025-12-14 21:31:03,309 - WARNING - __main__ - No label found for b581baad-sajat_resztvevo04_02.jpg in D6AE9F.json
+2025-12-14 21:31:03,310 - INFO - __main__ - Loading annotations from /data/consensus/DN04PZ.json
+2025-12-14 21:31:03,321 - INFO - __main__ - Loading annotations from /data/consensus/DPMC6W.json
+2025-12-14 21:31:03,323 - WARNING - __main__ - Failed to load annotations from /data/consensus/DPMC6W.json: Expecting value: line 1 column 1 (char 0)
+2025-12-14 21:31:03,323 - INFO - __main__ - Loading annotations from /data/consensus/ECSGGY.json
+2025-12-14 21:31:03,326 - INFO - __main__ - Loading annotations from /data/consensus/FGWUFP.json
+2025-12-14 21:31:03,330 - INFO - __main__ - Loading annotations from /data/consensus/FO6K58.json
+2025-12-14 21:31:03,333 - WARNING - __main__ - No label found for c5107088-sajat_reszvevo_05_04.jpg in FO6K58.json
+2025-12-14 21:31:03,334 - INFO - __main__ - Loading annotations from /data/consensus/GI9Y8B.json
+2025-12-14 21:31:03,336 - INFO - __main__ - Loading annotations from /data/consensus/GK1XQ4.json
+2025-12-14 21:31:03,340 - INFO - __main__ - Loading annotations from /data/consensus/ITWQ3V.json
+2025-12-14 21:31:03,342 - WARNING - __main__ - Failed to load annotations from /data/consensus/ITWQ3V.json: Expecting value: line 1 column 1 (char 0)
+2025-12-14 21:31:03,342 - INFO - __main__ - Loading annotations from /data/consensus/KRCH5Q.json
+2025-12-14 21:31:03,345 - INFO - __main__ - Loading annotations from /data/consensus/NC1O2T.json
+2025-12-14 21:31:03,348 - INFO - __main__ - Loading annotations from /data/consensus/NX9GA4.json
+2025-12-14 21:31:03,351 - INFO - __main__ - Loading annotations from /data/consensus/ODZF0M.json
+2025-12-14 21:31:03,354 - WARNING - __main__ - No label found for ddbf9dc5-sajat_reszvevo01_01.jpg in ODZF0M.json
+2025-12-14 21:31:03,355 - WARNING - __main__ - No label found for e694d9e5-sajat_reszvevo01_04.jpg in ODZF0M.json
+2025-12-14 21:31:03,355 - WARNING - __main__ - No label found for d6c806cc-sajat_reszvevo02_02.jpg in ODZF0M.json
+2025-12-14 21:31:03,355 - WARNING - __main__ - No label found for f58921df-sajat_reszvevo03_03.jpg in ODZF0M.json
+2025-12-14 21:31:03,356 - WARNING - __main__ - No label found for 709abdda-sajat_reszvevo08_01.jpg in ODZF0M.json
+2025-12-14 21:31:03,356 - INFO - __main__ - Loading annotations from /data/consensus/OJHGS8.json
+2025-12-14 21:31:03,359 - INFO - __main__ - Loading annotations from /data/consensus/XV0M8Z.json
+2025-12-14 21:31:03,363 - INFO - __main__ - Loading annotations from /data/consensus/YLEX88.json
+2025-12-14 21:31:03,367 - INFO - __main__ - Loading annotations from /data/consensus/YY0APN.json
+2025-12-14 21:31:03,370 - WARNING - __main__ - No label found for ec0b7192-internet_toorakvillagepodiatry_06.jpg in YY0APN.json
+2025-12-14 21:31:03,370 - WARNING - __main__ - No label found for a88ceb5b-sajat_reszvevo03_01.jpg in YY0APN.json
+2025-12-14 21:31:03,371 - INFO - __main__ - Loading annotations from /data/consensus/b8v41y.json
+2025-12-14 21:31:03,374 - INFO - __main__ - Loading annotations from /data/consensus/h51b9j.json
+2025-12-14 21:31:03,377 - WARNING - __main__ - No label found for 614e7f03-sajat_reszvevo_04_05.jpg in h51b9j.json
+2025-12-14 21:31:03,378 - INFO - __main__ - Loading annotations from /data/sample/project-1-at-2025-09-30-21-17-d687dfd4.json
+2025-12-14 21:31:03,386 - INFO - __main__ - Saved raw annotations to /app/output/all_annotations.csv
+2025-12-14 21:31:03,401 - INFO - __main__ - Saved majority labels to /app/output/majority_labels.csv
+2025-12-14 21:31:03,404 - INFO - __main__ - Merge match rate: 324/379
+2025-12-14 21:31:03,409 - INFO - __main__ - Class distribution (3-class, merged): {'Neutral': 170, 'Pronation': 124, 'Supination': 30}
+2025-12-14 21:31:03,409 - INFO - __main__ - Summary saved to /app/output/label_summary.json
+2025-12-14 21:31:05,729 - INFO - __main__ - Starting training with config: TrainingConfig(epochs=50, batch_size=32, learning_rate=0.02, early_stopping_patience=10, data_root=PosixPath('/data'), manifest_path=PosixPath('/app/output/image_manifest.csv'), labels_path=PosixPath('/app/output/majority_labels.csv'), model_output=PosixPath('/app/model.pth'), val_split=0.2, num_workers=0)
+2025-12-14 21:31:06,224 - INFO - __main__ - Using GPU: NVIDIA GeForce RTX 4050 Laptop GPU (device=0, count=1) | memory free/total: 4.96/6.00 GiB
+Downloading: "https://download.pytorch.org/models/efficientnet_b0_rwightman-7f5810bc.pth" to /root/.cache/torch/hub/checkpoints/efficientnet_b0_rwightman-7f5810bc.pth
+100.0%
+2025-12-14 21:31:07,920 - INFO - __main__ - class_to_idx: {'Neutral': 0, 'Pronation': 1, 'Supination': 2}
+2025-12-14 21:31:07,920 - INFO - __main__ - cost_matrix (rows=true, cols=pred):
+[[0. 1. 1.]
+ [1. 0. 2.]
+ [1. 2. 0.]]
+2025-12-14 21:31:34,331 - INFO - __main__ - Epoch 1/50 - lr: 0.020000 - train_loss: 1.8287 - val_loss: 2617610.2423 - val_acc: 0.0923
+2025-12-14 21:32:00,789 - INFO - __main__ - Epoch 2/50 - lr: 0.020000 - train_loss: 0.9719 - val_loss: 21322.2165 - val_acc: 0.3846
+2025-12-14 21:32:26,656 - INFO - __main__ - Epoch 3/50 - lr: 0.020000 - train_loss: 0.6699 - val_loss: 272.6960 - val_acc: 0.3846
+2025-12-14 21:32:51,449 - INFO - __main__ - Epoch 4/50 - lr: 0.020000 - train_loss: 0.6422 - val_loss: 6.1297 - val_acc: 0.1692
+2025-12-14 21:33:17,491 - INFO - __main__ - Epoch 5/50 - lr: 0.020000 - train_loss: 0.6047 - val_loss: 1.0021 - val_acc: 0.4154
+2025-12-14 21:33:42,678 - INFO - __main__ - Epoch 6/50 - lr: 0.020000 - train_loss: 0.4701 - val_loss: 0.5839 - val_acc: 0.4308
+2025-12-14 21:34:08,844 - INFO - __main__ - Epoch 7/50 - lr: 0.020000 - train_loss: 0.4572 - val_loss: 0.6262 - val_acc: 0.4769
+2025-12-14 21:34:35,692 - INFO - __main__ - Epoch 8/50 - lr: 0.020000 - train_loss: 0.4953 - val_loss: 0.7635 - val_acc: 0.4923
+2025-12-14 21:35:00,825 - INFO - __main__ - Epoch 9/50 - lr: 0.020000 - train_loss: 0.4599 - val_loss: 0.5342 - val_acc: 0.3846
+2025-12-14 21:35:27,020 - INFO - __main__ - Epoch 10/50 - lr: 0.020000 - train_loss: 0.4466 - val_loss: 0.5379 - val_acc: 0.4308
+2025-12-14 21:35:52,246 - INFO - __main__ - Epoch 11/50 - lr: 0.020000 - train_loss: 0.4221 - val_loss: 0.5475 - val_acc: 0.5077
+2025-12-14 21:36:18,319 - INFO - __main__ - Epoch 12/50 - lr: 0.020000 - train_loss: 0.4308 - val_loss: 0.5515 - val_acc: 0.4154
+2025-12-14 21:36:45,844 - INFO - __main__ - Epoch 13/50 - lr: 0.010000 - train_loss: 0.4482 - val_loss: 0.5508 - val_acc: 0.4615
+2025-12-14 21:37:11,017 - INFO - __main__ - Epoch 14/50 - lr: 0.010000 - train_loss: 0.4263 - val_loss: 0.4366 - val_acc: 0.4769
+2025-12-14 21:37:37,316 - INFO - __main__ - Epoch 15/50 - lr: 0.010000 - train_loss: 0.3805 - val_loss: 0.5627 - val_acc: 0.4462
+2025-12-14 21:38:03,210 - INFO - __main__ - Epoch 16/50 - lr: 0.010000 - train_loss: 0.3537 - val_loss: 0.5037 - val_acc: 0.4462
+2025-12-14 21:38:28,887 - INFO - __main__ - Epoch 17/50 - lr: 0.010000 - train_loss: 0.3571 - val_loss: 0.4528 - val_acc: 0.5077
+2025-12-14 21:38:55,360 - INFO - __main__ - Epoch 18/50 - lr: 0.010000 - train_loss: 0.3354 - val_loss: 0.5308 - val_acc: 0.5077
+2025-12-14 21:39:22,101 - INFO - __main__ - Epoch 19/50 - lr: 0.005000 - train_loss: 0.3219 - val_loss: 0.4820 - val_acc: 0.6000
+2025-12-14 21:39:48,841 - INFO - __main__ - Epoch 20/50 - lr: 0.005000 - train_loss: 0.2930 - val_loss: 0.4849 - val_acc: 0.5846
+2025-12-14 21:40:14,872 - INFO - __main__ - Epoch 21/50 - lr: 0.005000 - train_loss: 0.3061 - val_loss: 0.4647 - val_acc: 0.5538
+2025-12-14 21:40:41,798 - INFO - __main__ - Epoch 22/50 - lr: 0.005000 - train_loss: 0.2709 - val_loss: 0.5234 - val_acc: 0.5385
+2025-12-14 21:41:09,048 - INFO - __main__ - Epoch 23/50 - lr: 0.005000 - train_loss: 0.2716 - val_loss: 0.4587 - val_acc: 0.5846
+2025-12-14 21:41:34,092 - INFO - __main__ - Epoch 24/50 - lr: 0.005000 - train_loss: 0.2330 - val_loss: 0.5017 - val_acc: 0.5385
+2025-12-14 21:41:34,093 - INFO - __main__ - Early stopping triggered at epoch 24
+2025-12-14 21:41:34,135 - INFO - __main__ - Saved model checkpoint to /app/model.pth
+2025-12-14 21:41:36,763 - INFO - __main__ - Starting evaluation with checkpoint /app/model.pth
+2025-12-14 21:41:37,500 - INFO - __main__ - Baseline always predicts 'Neutral' (170 occurrences)
+2025-12-14 21:42:02,908 - INFO - __main__ - Baseline accuracy: 0.5247
+2025-12-14 21:42:02,909 - INFO - __main__ - Model accuracy: 0.7593
+2025-12-14 21:42:04,995 - INFO - utils - Running inference...
+[run.sh] Pipeline finished at 2025-12-14T21:42:05+00:00

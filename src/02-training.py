@@ -5,6 +5,7 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
@@ -19,6 +20,92 @@ from utils import (
 
 logger = setup_logger(__name__)
 
+
+class DistanceSoftTargetKLLoss(nn.Module):
+    """
+    Builds a soft target distribution q(.|y) from a distance/cost matrix C[y, j],
+    then minimizes KL(q || p) where p = softmax(logits).
+
+    q_j ∝ exp(-C[y, j] / temperature)
+
+    - temperature small: sharper targets
+    - temperature large: softer targets
+    """
+    def __init__(self, cost_matrix: torch.Tensor, temperature: float = 0.5, reduction: str = "batchmean"):
+        super().__init__()
+        if cost_matrix.ndim != 2 or cost_matrix.shape[0] != cost_matrix.shape[1]:
+            raise ValueError("cost_matrix must be square [K, K]")
+        if temperature <= 0:
+            raise ValueError("temperature must be > 0")
+        self.register_buffer("C", cost_matrix.float())
+        self.temperature = float(temperature)
+        self.reduction = reduction
+        self.kl = nn.KLDivLoss(reduction=reduction)
+
+    def forward(self, logits: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+        # log p
+        log_p = F.log_softmax(logits, dim=1)  # [B, K]
+
+        # build q from distances for each target:
+        # q ∝ exp(-C[y] / T)
+        # C[targets] -> [B, K]
+        dist = self.C[targets]  # [B, K]
+        q = torch.softmax(-dist / self.temperature, dim=1)  # [B, K]
+
+        return self.kl(log_p, q)
+def _pick_label_key(class_to_idx: dict) -> str:
+    """
+    Try to find the right keys for the 3 classes regardless of casing/formatting.
+    This keeps training robust if your CSV has e.g. "Normal" instead of "normal".
+    """
+    # canonical -> candidates we accept
+    candidates = {
+        "normal": ["normal", "norm", "neutral"],
+        "pronation": ["pronation", "pronated", "overpronation", "over_pronation"],
+        "supination": ["supination", "supinated", "oversupination", "over_supination"],
+    }
+
+    normalized = {str(k).strip().lower(): k for k in class_to_idx.keys()}
+
+    resolved = {}
+    for canon, opts in candidates.items():
+        found = None
+        for opt in opts:
+            if opt in normalized:
+                found = normalized[opt]
+                break
+        if found is None:
+            raise KeyError(
+                f"Could not resolve label '{canon}'. Available labels: {list(class_to_idx.keys())}"
+            )
+        resolved[canon] = found
+    return resolved  # dict canonical -> actual key
+
+
+def build_cost_matrix(class_to_idx: dict[str, int]) -> torch.Tensor:
+    """
+    Build the distance-aware cost matrix for 3 ordinal-ish classes:
+      - normal is distance 1 from pronation
+      - normal is distance 1 from supination
+      - pronation is distance 2 from supination
+
+    Costs are symmetric and diagonal is 0.
+    """
+    keys = _pick_label_key(class_to_idx)
+
+    pro = class_to_idx[keys["pronation"]]
+    nor = class_to_idx[keys["normal"]]
+    sup = class_to_idx[keys["supination"]]
+
+    K = len(class_to_idx)
+    C = torch.zeros((K, K), dtype=torch.float32)
+
+    # symmetric distances
+    C[nor, pro] = C[pro, nor] = 1.0
+    C[nor, sup] = C[sup, nor] = 1.0
+    C[pro, sup] = C[sup, pro] = 2.0
+
+    return C
 
 @dataclass
 class TrainingConfig:
@@ -54,7 +141,7 @@ def train(cfg: TrainingConfig):
         mem_info = None
         try:
             free_mem, total_mem = torch.cuda.mem_get_info()
-            mem_info = (free_mem / (1024 ** 3), total_mem / (1024 ** 3))
+            mem_info = (free_mem / (1024**3), total_mem / (1024**3))
         except RuntimeError:
             pass
 
@@ -88,33 +175,42 @@ def train(cfg: TrainingConfig):
         num_workers=cfg.num_workers,
     )
 
-    criterion = nn.CrossEntropyLoss()
+    cost_matrix = build_cost_matrix(class_to_idx).to(device)
+    criterion = DistanceSoftTargetKLLoss(cost_matrix, temperature=0.5)
+
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg.learning_rate)
 
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer,
         mode="min",
         factor=0.5,
-        patience=4,
+        patience=3,
+        cooldown=2,
         threshold=1e-4,
+        threshold_mode="rel",
         min_lr=1e-6,
-        verbose=False,
     )
 
     best_val_loss = float("inf")
     best_state = None
     patience = 0
 
+    logger.info("class_to_idx: %s", class_to_idx)
+    logger.info("cost_matrix (rows=true, cols=pred):\n%s", cost_matrix.detach().cpu().numpy())
+
     for epoch in range(1, cfg.epochs + 1):
         model.train()
         running_loss = 0.0
+
         for images, targets in train_loader:
             images, targets = images.to(device), targets.to(device)
-            optimizer.zero_grad()
+
+            optimizer.zero_grad(set_to_none=True)
             outputs = model(images)
             loss = criterion(outputs, targets)
             loss.backward()
             optimizer.step()
+
             running_loss += loss.item() * images.size(0)
 
         epoch_loss = running_loss / len(train_loader.dataset)
@@ -123,12 +219,16 @@ def train(cfg: TrainingConfig):
         val_loss = 0.0
         correct = 0
         total = 0
+
         with torch.no_grad():
             for images, targets in val_loader:
                 images, targets = images.to(device), targets.to(device)
+
                 outputs = model(images)
                 loss = criterion(outputs, targets)
+
                 val_loss += loss.item() * images.size(0)
+
                 preds = outputs.argmax(dim=1)
                 correct += (preds == targets).sum().item()
                 total += targets.size(0)
@@ -167,6 +267,8 @@ def train(cfg: TrainingConfig):
         "model_state": best_state,
         "class_to_idx": class_to_idx,
         "architecture": "efficientnet_b0",
+        "loss": "cost_sensitive_cross_entropy",
+        "cost_matrix": cost_matrix.detach().cpu(),
     }
     torch.save(checkpoint, cfg.model_output)
     logger.info("Saved model checkpoint to %s", cfg.model_output)
