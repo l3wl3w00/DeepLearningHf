@@ -1,8 +1,8 @@
 # Configuration settings as an example
 
 # Training hyperparameters
-EPOCHS = 1000
-EARLY_STOPPING_PATIENCE = 1000
+EPOCHS = 50
+EARLY_STOPPING_PATIENCE = 50
 BATCH_SIZE = 256
 LEARNING_RATE = 0.01
 

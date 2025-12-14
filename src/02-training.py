@@ -1,20 +1,21 @@
 """Fine-tune an image classifier for the AnkleAlign dataset."""
-
 import argparse
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, Tuple
 
-import pandas as pd
 import torch
 import torch.nn as nn
 from sklearn.model_selection import train_test_split
-from torch.utils.data import DataLoader, Dataset
-from torchvision import models, transforms
-from PIL import Image
+from torch.utils.data import DataLoader
 
 import config
-from utils import load_config, setup_logger
+from utils import (
+    AnkleDataset,
+    build_efficientnet_b0,
+    load_config,
+    load_manifest_and_labels,
+    setup_logger,
+)
 
 logger = setup_logger(__name__)
 
@@ -33,78 +34,11 @@ class TrainingConfig:
     num_workers: int = 2
 
 
-class AnkleDataset(Dataset):
-    """Dataset that reads images based on the manifest and majority labels."""
-
-    def __init__(self, df: pd.DataFrame, data_root: Path, class_to_idx: Dict[str, int]):
-        self.df = df.reset_index(drop=True)
-        self.data_root = data_root
-        self.class_to_idx = class_to_idx
-        self.transform = transforms.Compose(
-            [
-                transforms.Resize((224, 224)),
-                transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-            ]
-        )
-
-    def __len__(self):
-        return len(self.df)
-
-    def __getitem__(self, idx):
-        row = self.df.iloc[idx]
-        image_path = self.data_root / row["relative_path"]
-        image = Image.open(image_path).convert("RGB")
-        tensor = self.transform(image)
-        label = self.class_to_idx[row["majority_label"]]
-        return tensor, label
-
-
-def _load_dataset(manifest_path: Path, labels_path: Path, data_root: Path) -> Tuple[pd.DataFrame, Dict[str, int]]:
-    if not manifest_path.exists():
-        logger.error("Manifest not found: %s", manifest_path)
-        raise FileNotFoundError(manifest_path)
-
-    if not labels_path.exists():
-        logger.error("Labels not found: %s", labels_path)
-        raise FileNotFoundError(labels_path)
-
-    manifest = pd.read_csv(manifest_path)
-    labels = pd.read_csv(labels_path)
-    merged = manifest.merge(labels, on="file_upload", how="inner")
-    merged = merged.dropna(subset=["majority_label"])
-
-    if merged.empty:
-        raise ValueError("No labeled samples available after merging manifest and labels.")
-
-    class_names = sorted(merged["majority_label"].unique())
-    class_to_idx = {label: idx for idx, label in enumerate(class_names)}
-
-    missing_files = [
-        row["relative_path"]
-        for _, row in merged.iterrows()
-        if not (data_root / row["relative_path"]).exists()
-    ]
-    if missing_files:
-        logger.warning("%d files listed in manifest are missing on disk", len(missing_files))
-        merged = merged[~merged["relative_path"].isin(missing_files)]
-
-    if merged.empty:
-        raise ValueError("All referenced files are missing from disk after filtering.")
-
-    return merged, class_to_idx
-
-
-def _build_model(num_classes: int):
-    base = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
-    in_features = base.classifier[-1].in_features
-    base.classifier[-1] = nn.Linear(in_features, num_classes)
-    return base
-
-
 def train(cfg: TrainingConfig):
     logger.info("Starting training with config: %s", cfg)
-    df, class_to_idx = _load_dataset(cfg.manifest_path, cfg.labels_path, cfg.data_root)
+    df, class_to_idx = load_manifest_and_labels(
+        cfg.manifest_path, cfg.labels_path, cfg.data_root, logger=logger
+    )
 
     train_df, val_df = train_test_split(
         df,
@@ -115,7 +49,7 @@ def train(cfg: TrainingConfig):
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     num_classes = len(class_to_idx)
-    model = _build_model(num_classes).to(device)
+    model = build_efficientnet_b0(num_classes).to(device)
 
     train_loader = DataLoader(
         AnkleDataset(train_df, cfg.data_root, class_to_idx),
