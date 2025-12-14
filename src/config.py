@@ -3,9 +3,9 @@
 # Training hyperparameters
 EPOCHS = 50
 EARLY_STOPPING_PATIENCE = 50
-BATCH_SIZE = 256
+BATCH_SIZE = 32
 LEARNING_RATE = 0.01
 
 # Paths
-DATA_DIR = "/app/data"
+DATA_DIR = "/data"
 MODEL_SAVE_PATH = "/app/model.pth"

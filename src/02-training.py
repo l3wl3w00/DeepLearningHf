@@ -31,7 +31,7 @@ class TrainingConfig:
     labels_path: Path
     model_output: Path
     val_split: float = 0.2
-    num_workers: int = 2
+    num_workers: int = 0
 
 
 def train(cfg: TrainingConfig):
@@ -48,6 +48,30 @@ def train(cfg: TrainingConfig):
     )
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.is_available():
+        current_device = torch.cuda.current_device()
+        device_name = torch.cuda.get_device_name(current_device)
+        mem_info = None
+        try:
+            free_mem, total_mem = torch.cuda.mem_get_info()
+            mem_info = (free_mem / (1024 ** 3), total_mem / (1024 ** 3))
+        except RuntimeError:
+            pass
+
+        logger.info(
+            "Using GPU: %s (device=%d, count=%d)%s",
+            device_name,
+            current_device,
+            torch.cuda.device_count(),
+            " | memory free/total: %.2f/%.2f GiB" % mem_info if mem_info else "",
+        )
+    else:
+        logger.warning(
+            "CUDA is not available; running on CPU. If a GPU is expected inside the "
+            "container, ensure the container is started with GPU support (e.g., "
+            "--gpus all with the NVIDIA Container Toolkit)."
+        )
+
     num_classes = len(class_to_idx)
     model = build_efficientnet_b0(num_classes).to(device)
 
@@ -66,6 +90,16 @@ def train(cfg: TrainingConfig):
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=cfg.learning_rate)
+
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer,
+        mode="min",
+        factor=0.5,
+        patience=4,
+        threshold=1e-4,
+        min_lr=1e-6,
+        verbose=False,
+    )
 
     best_val_loss = float("inf")
     best_state = None
@@ -102,10 +136,14 @@ def train(cfg: TrainingConfig):
         val_loss /= len(val_loader.dataset)
         val_acc = correct / total if total else 0.0
 
+        scheduler.step(val_loss)
+        current_lr = optimizer.param_groups[0]["lr"]
+
         logger.info(
-            "Epoch %d/%d - train_loss: %.4f - val_loss: %.4f - val_acc: %.4f",
+            "Epoch %d/%d - lr: %.6f - train_loss: %.4f - val_loss: %.4f - val_acc: %.4f",
             epoch,
             cfg.epochs,
+            current_lr,
             epoch_loss,
             val_loss,
             val_acc,
@@ -156,7 +194,7 @@ def parse_args():
     parser.add_argument("--learning-rate", type=float, default=defaults.LEARNING_RATE)
     parser.add_argument("--early-stopping", type=int, default=defaults.EARLY_STOPPING_PATIENCE)
     parser.add_argument("--val-split", type=float, default=0.2)
-    parser.add_argument("--num-workers", type=int, default=2)
+    parser.add_argument("--num-workers", type=int, default=0)
     return parser.parse_args()
 
 
